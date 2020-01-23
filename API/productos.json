@@ -1,0 +1,22 @@
+[
+    { "codigo": 1,"nombre": "Producto 1", "cantidad": 0 },
+    { "codigo": 2,"nombre": "Producto 2", "cantidad": 20 },
+    { "codigo": 3,"nombre": "Producto 3", "cantidad": 7 },
+    { "codigo": 4,"nombre": "Producto 4", "cantidad": 2 },
+    { "codigo": 5,"nombre": "Producto 5", "cantidad": 0 },
+    { "codigo": 6,"nombre": "Producto 6", "cantidad": 9 },
+    { "codigo": 7,"nombre": "Producto 7", "cantidad": 21 },
+    { "codigo": 8,"nombre": "Producto 8", "cantidad": 31 },
+    { "codigo": 9,"nombre": "Producto 9", "cantidad": 7 },
+    { "codigo": 10,"nombre": "Producto 10", "cantidad": 10 },
+    { "codigo": 11,"nombre": "Producto 11", "cantidad": 1 },
+    { "codigo": 12,"nombre": "Producto 12", "cantidad": 0 },
+    { "codigo": 13,"nombre": "Producto 13", "cantidad": 15 },
+    { "codigo": 14,"nombre": "Producto 14", "cantidad": 13 },
+    { "codigo": 15,"nombre": "Producto 15", "cantidad": 11 },
+    { "codigo": 16,"nombre": "Producto 16", "cantidad": 12 },
+    { "codigo": 17,"nombre": "Producto 17", "cantidad": 7 },
+    { "codigo": 18,"nombre": "Producto 18", "cantidad": 0 },
+    { "codigo": 19,"nombre": "Producto 19", "cantidad": 9 },
+    { "codigo": 20,"nombre": "Producto 20", "cantidad": 23 }
+]
