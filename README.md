@@ -1,1 +1,1 @@
-# Ejercicios 2 y 3 examen técnico
+# Evaluación tecnica
