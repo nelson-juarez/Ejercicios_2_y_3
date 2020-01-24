@@ -3,7 +3,7 @@
 		<v-app-bar app class="grey lighten-5" dark >
 			<v-toolbar-title class="text-uppercase grey--text">
 				<span class="font-weight-bold"> Codeicus </span>
-				<span class="font-weight-light">- Ejercicio 1</span>
+				<span class="font-weight-light">- Ejercicios 2 y 3</span>
 			</v-toolbar-title>
 		</v-app-bar>
 		<v-divider></v-divider>
@@ -23,8 +23,8 @@
 										<v-select
 										v-model="v_producto"
 										:items="arProductos"
-										item-text="nombre"
-										item-value="codigo"
+										item-text="name"
+										item-value="cod"
 										:rules="[v => !!v || '* El campo es requerido']"
 										label="Producto"
 										required
@@ -83,17 +83,22 @@
 										<tbody>
 											<tr v-for="item in arProdPedido" :key="item.codigo">
 												<td class="text-center"> 
-													<v-btn text icon color="red" @click="quitarProducto(item.codigo)">
-														<v-icon>delete</v-icon>
-													</v-btn>
+													<v-tooltip bottom>
+														<template v-slot:activator="{ on }">
+															<v-btn text v-on="on" icon color="red" @click="quitarProducto(item.cod)">
+																<v-icon>delete</v-icon>
+															</v-btn>
+														</template>
+														<span>Quitar producto</span>
+													</v-tooltip>
 												</td>
-												<td>{{ item.codigo }}</td>
-												<td>{{ item.nombre }}</td>
+												<td>{{ item.cod }}</td>
+												<td>{{ item.name }}</td>
 												<td>
-													<v-chip v-if="item.cantidad==0" class="ma-2" color="red" dark >
+													<v-chip v-if="item.stock==0" class="ma-2" color="red" dark >
 														Sin stock
 													</v-chip>
-													<span v-if="item.cantidad"> {{ item.cantidad }} </span>
+													<span v-if="item.stock"> {{ item.stock }} </span>
 												</td>
 											</tr>
 										</tbody>                                
@@ -134,7 +139,6 @@
 												label="DNI Receptor"
 												:required="required"
 												:rules="[rulesEnvio]"
-												@blur="rulesEnvio"
 											></v-text-field>
 										</v-flex>
 										<v-flex sm4 xs12 class="pa-sm-2 ">
@@ -143,31 +147,31 @@
 												label="Nombre Receptor"
 												:required="required"
 												:rules="[rulesEnvio]"
-												@blur="rulesEnvio"
 											></v-text-field>
 										</v-flex>
 										<v-flex sm4 xs12 class="pa-sm-2 ">
 											<v-menu
-												ref="menu"
 												v-model="menu"
 												:close-on-content-click="false"
-												:return-value.sync="v_fechaEntrega"
-												transition="scale-transition"
-												offset-y
-												min-width="290px"
-											>
+												max-width="290"
+												>
 												<template v-slot:activator="{ on }">
-												<v-text-field
-													v-model="dateFormatted"
+													<v-text-field
+													:value="v_fechaEntrega"
+													clearable
 													label="Fecha de entrega"
-													prepend-icon="event"
 													readonly
-													@blur="v_fechaEntrega = parseDate(dateFormatted)"
 													v-on="on"
-												></v-text-field>
+													prepend-icon="event"
+													@click:clear="v_fechaEntrega = null"
+													></v-text-field>
 												</template>
-												<v-date-picker v-model="v_fechaEntrega" no-title scrollable :min="nowDate" @input="menu = false" />
-											</v-menu>                        
+												<v-date-picker
+												:min="nowDate"
+													v-model="v_fechaEntrega"
+													@change="menu = false"
+												></v-date-picker>
+											</v-menu>                     
 										</v-flex>
 									</v-layout>
 									<v-layout>
@@ -222,31 +226,31 @@
 </template>
 
 <script>
-
+import format from 'date-fns/format'
   export default {
 	data: vm => ({
 		v_producto: null,
 		arProductos: [
-					{ "codigo": 1,"nombre": "Producto 1", "cantidad": 0 },
-					{ "codigo": 2,"nombre": "Producto 2", "cantidad": 20 },
-					{ "codigo": 3,"nombre": "Producto 3", "cantidad": 7 },
-					{ "codigo": 4,"nombre": "Producto 4", "cantidad": 2 },
-					{ "codigo": 5,"nombre": "Producto 5", "cantidad": 0 },
-					{ "codigo": 6,"nombre": "Producto 6", "cantidad": 9 },
-					{ "codigo": 7,"nombre": "Producto 7", "cantidad": 21 },
-					{ "codigo": 8,"nombre": "Producto 8", "cantidad": 31 },
-					{ "codigo": 9,"nombre": "Producto 9", "cantidad": 7 },
-					{ "codigo": 10,"nombre": "Producto 10", "cantidad": 10 },
-					{ "codigo": 11,"nombre": "Producto 11", "cantidad": 1 },
-					{ "codigo": 12,"nombre": "Producto 12", "cantidad": 0 },
-					{ "codigo": 13,"nombre": "Producto 13", "cantidad": 15 },
-					{ "codigo": 14,"nombre": "Producto 14", "cantidad": 13 },
-					{ "codigo": 15,"nombre": "Producto 15", "cantidad": 11 },
-					{ "codigo": 16,"nombre": "Producto 16", "cantidad": 12 },
-					{ "codigo": 17,"nombre": "Producto 17", "cantidad": 7 },
-					{ "codigo": 18,"nombre": "Producto 18", "cantidad": 0 },
-					{ "codigo": 19,"nombre": "Producto 19", "cantidad": 9 },
-					{ "codigo": 20,"nombre": "Producto 20", "cantidad": 23 }
+					{ id:  1, "cod": 1,"name": "Producto 1", "stock": 0 },
+					{ id:  2, "cod": 2,"name": "Producto 2", "stock": 20 },
+					{ id:  3, "cod": 3,"name": "Producto 3", "stock": 7 },
+					{ id:  4, "cod": 4,"name": "Producto 4", "stock": 2 },
+					{ id:  5, "cod": 5,"name": "Producto 5", "stock": 0 },
+					{ id:  6, "cod": 6,"name": "Producto 6", "stock": 9 },
+					{ id:  7, "cod": 7,"name": "Producto 7", "stock": 21 },
+					{ id:  8, "cod": 8,"name": "Producto 8", "stock": 31 },
+					{ id:  9, "cod": 9,"name": "Producto 9", "stock": 7 },
+					{ id:  10, "cod": 10,"name": "Producto 10", "stock": 10 },
+					{ id:  11, "cod": 11,"name": "Producto 11", "stock": 1 },
+					{ id:  12, "cod": 12,"name": "Producto 12", "stock": 0 },
+					{ id:  13, "cod": 13,"name": "Producto 13", "stock": 15 },
+					{ id:  14, "cod": 14,"name": "Producto 14", "stock": 13 },
+					{ id:  15, "cod": 15,"name": "Producto 15", "stock": 11 },
+					{ id:  16, "cod": 16,"name": "Producto 16", "stock": 12 },
+					{ id:  17, "cod": 17,"name": "Producto 17", "stock": 7 },
+					{ id:  18, "cod": 18,"name": "Producto 18", "stock": 0 },
+					{ id:  19, "cod": 19,"name": "Producto 19", "stock": 9 },
+					{ id:  20, "cod": 20,"name": "Producto 20", "stock": 23 }
 				],
 		v_cantidad: null,
 		e6: 1,
@@ -260,9 +264,8 @@
 		v_nombre: null,
 		v_comentario: '',
 		validOpc: true,
-		nowDate: new Date().toISOString().slice(0,10),
-		dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-		v_fechaEntrega: new Date().toISOString().substr(0, 10),
+		nowDate: new Date().toISOString().substr(0, 10),
+		v_fechaEntrega: null,
 		menu: false,
 		loadingProc: false,
 		procesoExitoso: false,
@@ -270,9 +273,10 @@
 		procesoCompletado: null
 	}),
 	computed: {
-	  	computedDateFormatted () {
-			return this.formatDate(this.v_fechaEntrega)
-	  	}
+		formattedDate () {
+			console.log( this.v_fechaEntrega );
+			return this.v_fechaEntrega ? format(this.v_fechaEntrega, 'Do MMM YYYY') : '';
+		}
 	},
 	methods: {
 	  validate () {
@@ -280,13 +284,13 @@
 			// Verifico que lo ingresado no supere lo disponible
 
 			// Obtengo el stock disponible para el producto en cuestión. Por defecto es lo que viene, llega al obtener los datos.
-			var cantiDisponible = this.v_producto.cantidad;
+			var cantiDisponible = this.v_producto.stock;
 
 			// Si ya fue cargado debo obtener el disponible
 			if( this.arStockDisponible.length > 0 )
-				if( this.arStockDisponible.find(obj => obj.codigo === this.v_producto.codigo ))
-					cantiDisponible = this.arStockDisponible.find(obj => obj.codigo === this.v_producto.codigo ).cantidad;
-			
+				if( this.arStockDisponible.find(obj => obj.cod === this.v_producto.cod ))
+					cantiDisponible = this.arStockDisponible.find(obj => obj.cod === this.v_producto.cod ).stock;
+			console.log( cantiDisponible);
 			// Si lo ingresado supero lo disponible muestro un mensaje de error
 			if( this.v_cantidad > cantiDisponible ) {
 				this.maxCantidad = cantiDisponible;
@@ -296,35 +300,40 @@
 				this.maxCantidad = null;
 				var nuevo = false;
 
-				if( this.arStockDisponible.findIndex(obj => obj.codigo === this.v_producto.codigo) >= 0 ) {        
+				if( this.arStockDisponible.findIndex(obj => obj.cod === this.v_producto.cod) >= 0 ) {        
 					// Actualizo la cantidad disponible
 					this.arStockDisponible.filter(obj => { 
-						if(obj.codigo === this.v_producto.codigo){
-							obj.cantidad -= this.v_cantidad;
+						if(obj.cod === this.v_producto.cod){
+							obj.stock -= this.v_cantidad;
 						}
 						return obj;
 					});
 
 					nuevo = true;
 				} else {
+					console.log('pasa 1' );
+					console.log( this.v_producto.stock +'-'+ this.v_cantidad );
 					// Si lo ingreso el stock disponible va a ser lo que tiene menos lo que se agregó
 					this.arStockDisponible.push({ 
-						codigo: this.v_producto.codigo,
-						cantidad: this.v_producto.cantidad - this.v_cantidad
+						cod: this.v_producto.cod,
+						stock: this.v_producto.stock - this.v_cantidad
 					});
+					console.log( this.arStockDisponible );
 				}
 
 				if( !nuevo ) {
+					console.log( this.v_producto );
 					// Inserto el producto en la tabla
 					this.arProdPedido.push({
-						codigo: this.v_producto.codigo,
-						nombre: this.v_producto.nombre,
-						cantidad: this.v_cantidad
+						id: this.v_producto.id,
+						cod: this.v_producto.cod,
+						name: this.v_producto.name,
+						stock: this.v_cantidad
 					});
 				} else {
 					this.arProdPedido.filter(obj => { 
-						if(obj.codigo === this.v_producto.codigo){
-							obj.cantidad += this.v_cantidad;
+						if(obj.cod === this.v_producto.cod){
+							obj.stock += this.v_cantidad;
 						}
 						return obj;
 					});
@@ -344,77 +353,53 @@
 			}
 	  },
 	  resetValidation () {
-		this.$refs.form.resetValidation()
+		this.$refs.form.resetValidation();
+		this.$refs.formOpc.resetValidation();
 	  },
 	  quitarProducto (codProducto){
-		  this.arProdPedido = this.arProdPedido.filter( e => e.codigo != codProducto);
+		  this.arProdPedido = this.arProdPedido.filter( e => e.cod != codProducto);
 		  // Actualizo el stock disponible para el producto en cuestión.
-		  this.arStockDisponible = this.arStockDisponible.filter( e => e.codigo != codProducto);
+		  this.arStockDisponible = this.arStockDisponible.filter( e => e.cod != codProducto);
 	  },
 	  	validateEnvio (){
-			var validEnvio = (this.required && ( this.v_dni && this.v_nombre) ) ||
-							 (!this.required && ( !this.v_dni && !this.v_nombre) );
-			if( this.arStockDisponible.length > 0 && validEnvio) {
-				this.loadingProc = true;
-				setTimeout( () => {
-					this.procesoCompletado=true;
-					this.loadingProc = false; 
-					this.procesoExitoso = true;
-					this.arStockDisponible = [];
-					this.arProdPedido = [];
-					this.v_dni = this.v_nombre = this.v_comentario = this.v_producto = this.v_cantidad = null;
-					this.v_fechaEntrega = new Date().toISOString().substr(0, 10);
+			// Antes de enviar el pedido verifico que el formulario sea válido
+			var validEnvio = this.$refs.formOpc.validate();
 
+			if( validEnvio ) {
+				// Si el formulario es válido genero el proceso de envío y reseteo los valores
+				if( this.arProdPedido.length > 0 && validEnvio) {
+					this.loadingProc = true;
 					setTimeout( () => {
-						this.procesoCompletado = null;
-						this.procesoErroneo = this.procesoExitoso = false;
-						this.e6 = 1;
+						this.procesoCompletado=true;
+						this.loadingProc = false; 
+						this.procesoExitoso = true;
+						this.arStockDisponible = [];
+						this.arProdPedido = [];
+						this.resetValidation();
+						
+						setTimeout( () => {
+							this.procesoCompletado = null;
+							this.procesoErroneo = this.procesoExitoso = false;
+							this.e6 = 1;
+						}, 3000);
 					}, 3000);
-				}, 3000);
+				}
 			}
-
 	  	},
-	  	rulesEnvio (value) {
+	  	rulesEnvio (v) {
 			var valid = true;
 
-			if (this.required && value.length === 0) {
-				valid = "El campo es requerido.";  
+			if (this.required) {
+				return !!v || 'El campo es requerido';
 			}
 
 			return valid;
-		},
-	formatDate (date) {
-		if (!date) return null
-
-		const [year, month, day] = date.split('-')
-		return `${day}/${month}/${year}`
-	  },
-	  parseDate (date) {
-		if (!date) return null
-
-		const [month, day, year] = date.split('/')
-		return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-	  }
-	
+		  }
 	},
 	watch: {
 	  v_producto (val) {
 		if (val != null) this.tab = 0
 		else this.tab = null
-	  },
-	  search (val) {
-		// Items have already been loaded
-		if (this.items.length > 0) return
-
-		fetch('API/productos.json')
-		  .then(res => res.json())
-		  .then(res => {
-			this.items = res.data
-		  })
-		  .catch(err => {
-			console.log(err)
-		  })
-		  .finally(() => (this.isLoading = false))
 	  },
 	  v_dni (val){
 		  if (val || this.v_nombre ) this.required = true;
@@ -423,50 +408,7 @@
 	  v_nombre (val){
 		  if (val || this.v_dni) this.required = true;
 		  else this.required = false;
-	  },
-	  v_fechaEntrega (val) {
-		this.dateFormatted = this.formatDate(this.v_fechaEntrega)
 	  }
 	}
   }
 </script>
-
-
-<style>
-  .custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
-  }
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-</style>
